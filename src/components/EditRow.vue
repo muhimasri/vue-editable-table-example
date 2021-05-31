@@ -2,25 +2,28 @@
   <div id="app">
     <b-table :items="items" :fields="fields">
       <template #cell(name)="data">
-          <b-form-input v-if="selectedRow[data.index] && selectedCell === 'name'" type="text" v-model="items[data.index].name"></b-form-input>
-          <span v-else @click="handleEditCell(data, 'name')">{{data.value}}</span>
+          <b-form-input v-if="selectedRow[data.index]" type="text" v-model="items[data.index].name"></b-form-input>
+          <span v-else>{{data.value}}</span>
       </template>
       <template #cell(department)="data">
-        <b-form-select v-if="selectedRow[data.index] && selectedCell === 'department'" v-model="items[data.index].department" :options="['Development', 'Marketing', 'HR', 'Accounting']" class="form-control"></b-form-select>
-        <span v-else @click="handleEditCell(data, 'department')">{{data.value}}</span>
+        <b-form-select v-if="selectedRow[data.index]" v-model="items[data.index].department" :options="['Development', 'Marketing', 'HR', 'Accounting']" class="form-control"></b-form-select>
+        <span v-else>{{data.value}}</span>
       </template>
       <template #cell(age)="data">
-          <b-form-input v-if="selectedRow[data.index] && selectedCell === 'age'" type="number" v-model="items[data.index].age"></b-form-input>
-          <span v-else @click="handleEditCell(data, 'age')">{{data.value}}</span>
+          <b-form-input v-if="selectedRow[data.index]" type="number" v-model="items[data.index].age"></b-form-input>
+          <span v-else>{{data.value}}</span>
       </template>
       <template #cell(dateOfBirth)="data">
-        <b-form-datepicker v-if="selectedRow[data.index] && selectedCell === 'dateOfBirth'" v-model="items[data.index].dateOfBirth"></b-form-datepicker>
-        <span v-else @click="handleEditCell(data, 'dateOfBirth')">{{data.value}}</span>
+        <b-form-datepicker v-if="selectedRow[data.index]" v-model="items[data.index].dateOfBirth"></b-form-datepicker>
+        <span v-else>{{data.value}}</span>
+      </template>
+      <template #cell(edit)="data">
+        <b-button @click="handleEditRow(data)">
+          <span v-if="!selectedRow[data.index]">Edit</span>
+          <span v-else>Done</span>
+        </b-button>
       </template>
     </b-table>
-     <pre>
-      {{items}}
-    </pre>
   </div>
 </template>
 
@@ -43,15 +46,14 @@ export default {
           { age: 89, name: 'Geneva', department: 'HR', dateOfBirth: '1984-05-20' },
           { age: 38, name: 'Jami', department: 'Accounting', dateOfBirth: '1984-05-20' }
         ],
-        selectedRow: {},
-        selectedCell: null
+        selectedRow: {}
     };
   },
   methods: {
-      handleEditCell(data, name) {
-        this.selectedCell = name;
+      handleEditRow(data) {
         this.selectedRow = {
-          [data.index]: true
+          ...this.selectedRow,
+          [data.index]: !this.selectedRow[data.index]
         }
       }
     }
