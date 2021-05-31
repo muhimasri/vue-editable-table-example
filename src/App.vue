@@ -1,23 +1,6 @@
 <template>
   <div id="app">
-    <b-table :items="items" :fields="fields">
-      <template #cell(name)="data">
-          <b-form-input v-if="selectedRow[data.index] && selectedCell === 'name'" type="text" v-model="items[data.index].name"></b-form-input>
-          <span v-else @click="handleEditCell(data, 'name')">{{data.value}}</span>
-      </template>
-      <template #cell(department)="data">
-        <b-form-select v-if="selectedRow[data.index] && selectedCell === 'department'" v-model="items[data.index].department" :options="['Development', 'Marketing', 'HR', 'Accounting']" class="form-control"></b-form-select>
-        <span v-else @click="handleEditCell(data, 'department')">{{data.value}}</span>
-      </template>
-      <template #cell(age)="data">
-          <b-form-input v-if="selectedRow[data.index] && selectedCell === 'age'" type="number" v-model="items[data.index].age"></b-form-input>
-          <span v-else @click="handleEditCell(data, 'age')">{{data.value}}</span>
-      </template>
-      <template #cell(dateOfBirth)="data">
-        <b-form-datepicker v-if="selectedRow[data.index] && selectedCell === 'dateOfBirth'" v-model="items[data.index].dateOfBirth"></b-form-datepicker>
-        <span v-else @click="handleEditCell(data, 'dateOfBirth')">{{data.value}}</span>
-      </template>
-    </b-table>
+    <EditableTable :items="items" :fields="fields"></EditableTable>
      <pre>
       {{items}}
     </pre>
@@ -25,17 +8,19 @@
 </template>
 
 <script>
+import EditableTable from './components/EditableTable.vue'
 export default {
   name: "App",
-  components: {},
+  components: {
+    EditableTable
+  },
   data() {
     return {
       fields: [
-        { key: "name", label: "Name"},
-        { key: "department", label: "Department" },
-        { key: "age", label: "Age" },
-        { key: "dateOfBirth", label: "Date Of Birth" },
-        { key: 'edit', label: ''}
+        { key: "name", label: "Name", type: "text" },
+        { key: "department", label: "Department", type: "select", options: ['Development', 'Marketing', 'HR', 'Accounting'] },
+        { key: "age", label: "Age", type: "number" },
+        { key: "dateOfBirth", label: "Date Of Birth", type: "date" }
       ],
        items: [
           { age: 40, name: 'Dickerson', department: 'Development', dateOfBirth: '1984-05-20' },

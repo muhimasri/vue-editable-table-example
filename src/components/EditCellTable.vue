@@ -26,7 +26,7 @@
 
 <script>
 export default {
-  name: "App",
+  name: "EditCellTable",
   components: {},
   data() {
     return {

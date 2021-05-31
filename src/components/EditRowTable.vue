@@ -29,7 +29,7 @@
 
 <script>
 export default {
-  name: "App",
+  name: "EdirRowTable",
   components: {},
   data() {
     return {
