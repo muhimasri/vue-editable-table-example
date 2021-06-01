@@ -1,5 +1,4 @@
 <template>
-  <div id="app">
     <b-table :items="items" :fields="fields">
       <template #cell(name)="data">
           <b-form-input v-if="selectedRow[data.index]" type="text" v-model="items[data.index].name"></b-form-input>
@@ -24,7 +23,6 @@
         </b-button>
       </template>
     </b-table>
-  </div>
 </template>
 
 <script>
@@ -61,17 +59,9 @@ export default {
 </script>
 
 <style>
-#app {
-  text-align: center;
-  margin: 60px;
-}
 thead, tbody, tfoot, tr, td, th {
   text-align: left;
   width: 100px;
   vertical-align: middle;
-}
-pre {
-  text-align: left;
-  color: #d63384;
 }
 </style>
