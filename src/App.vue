@@ -8,15 +8,21 @@
       <h3>Employee Contract</h3>
       <EditableTable :items="items2" :fields="fields2"></EditableTable>
     </article>
+    <article>
+      <h3>Employee Edit Row</h3>
+      <EditableRowTable></EditableRowTable>
+    </article>
   </div>
 </template>
 
 <script>
 import EditableTable from './components/EditableTable.vue'
+import EditableRowTable from './components/EditRowTable.vue'
 export default {
   name: "App",
   components: {
-    EditableTable
+    EditableTable,
+    EditableRowTable
   },
   data() {
     return {
