@@ -1,4 +1,6 @@
-# vue-editable-table
+# Editable Dynamic Table Using Vue Bootstrap
+
+This repository is an example to demonstrate how to create an editable table with Vue Bootstrap. Please refer to [this article](https://muhimasri.com/blogs/create-an-editable-dynamic-table-with-bootstrap-vue/) for a detailed explanation.
 
 ## Project setup
 ```
