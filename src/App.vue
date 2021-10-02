@@ -56,11 +56,6 @@ export default {
   text-align: center;
   margin: 60px;
 }
-thead, tbody, tfoot, tr, td, th {
-  text-align: left;
-  width: 100px;
-  vertical-align: middle;
-}
 pre {
   text-align: left;
   color: #d63384;
