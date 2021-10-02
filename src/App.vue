@@ -2,22 +2,22 @@
   <div id="app">
     <article>
       <h3>Employee Information</h3>
-      <EditTableRowDynamic v-model="items1" :fields="fields1"></EditTableRowDynamic>
+      <EditTableRow v-model="items1" :fields="fields1"></EditTableRow>
     </article>
     <article>
       <h3>Employee Contract</h3>
-      <EditTableRowDynamic v-model="items2" :fields="fields2"></EditTableRowDynamic>
+      <EditTableRow v-model="items2" :fields="fields2"></EditTableRow>
     </article>
   </div>
 </template>
 
 <script>
-import EditTableRowDynamic from './components/EditTableRowDynamic.vue';
+import EditTableRow from './components/EditTableRow.vue';
 
 export default {
   name: "App",
   components: {
-    EditTableRowDynamic
+    EditTableRow
   },
   data() {
     return {

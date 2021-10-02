@@ -15,7 +15,7 @@
 
 <script>
 export default {
-  name: "EditTableRowDynamic",
+  name: "EditTableRow",
   components: {},
   props: {
     value: Array,

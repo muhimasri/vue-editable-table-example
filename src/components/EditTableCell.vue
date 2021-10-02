@@ -12,7 +12,7 @@
 <script>
 
 export default {
-  name: 'EditTableCellDynamic',
+  name: 'EditTableCell',
   components: {
   },
   props: {
