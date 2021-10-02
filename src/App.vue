@@ -2,27 +2,22 @@
   <div id="app">
     <article>
       <h3>Employee Information</h3>
-      <EditableTable :items="items1" :fields="fields1"></EditableTable>
+      <EditTableRow v-model="items1" :fields="fields1"></EditTableRow>
     </article>
     <article>
       <h3>Employee Contract</h3>
-      <EditableTable :items="items2" :fields="fields2"></EditableTable>
-    </article>
-    <article>
-      <h3>Employee Edit Row</h3>
-      <EditableRowTable></EditableRowTable>
+      <EditTableRow v-model="items2" :fields="fields2"></EditTableRow>
     </article>
   </div>
 </template>
 
 <script>
-import EditableTable from './components/EditableTable.vue'
-import EditableRowTable from './components/EditRowTable.vue'
+import EditTableRow from './components/EditTableRow.vue';
+
 export default {
   name: "App",
   components: {
-    EditableTable,
-    EditableRowTable
+    EditTableRow
   },
   data() {
     return {
@@ -30,7 +25,8 @@ export default {
         { key: "name", label: "Name", type: "text" },
         { key: "department", label: "Department", type: "select", options: ['Development', 'Marketing', 'HR', 'Accounting'] },
         { key: "age", label: "Age", type: "number" },
-        { key: "dateOfBirth", label: "Date Of Birth", type: "date" }
+        { key: "dateOfBirth", label: "Date Of Birth", type: "date" },
+        { key: "edit", label: "", type: "edit" }
       ],
        items1: [
           { age: 40, name: 'Dickerson', department: 'Development', dateOfBirth: '1984-05-20' },
@@ -41,7 +37,8 @@ export default {
         fields2: [
           { key: "id", label: "ID", type: "number" },
           { key: "name", label: "Name", type: "text" },
-          { key: "contractEndDate", label: "Contract End Date", type: "date" }
+          { key: "contractEndDate", label: "Contract End Date", type: "date" },
+          { key: "edit", label: "", type: "edit" }
       ],
        items2: [
           { id: 123, name: 'Dickerson', contractEndDate: '2022-05-20' },
@@ -58,11 +55,6 @@ export default {
 #app {
   text-align: center;
   margin: 60px;
-}
-thead, tbody, tfoot, tr, td, th {
-  text-align: left;
-  width: 100px;
-  vertical-align: middle;
 }
 pre {
   text-align: left;
