@@ -1,8 +1,8 @@
 <template>
     <b-table :items="items" :fields="fields">
       <template v-for="(field, index) in fields" #[`cell(${field.key})`]="data">
-        <b-form-datepicker v-if="field.type === 'date' && items[data.index].isEdit" :key="index" :type="field.type" v-model="items[data.index][field.key]"></b-form-datepicker>
-        <b-form-select v-else-if="field.type === 'select' && items[data.index].isEdit" :key="index" v-model="items[data.index][field.key]" :options="field.options"></b-form-select>
+        <b-form-datepicker v-if="field.type === 'date' && items[data.index].isEdit" :key="index" :type="field.type" :value="items[data.index][field.key]" @input="(value) => inputHandler(value, data.index, field.key)"></b-form-datepicker>
+        <b-form-select v-else-if="field.type === 'select' && items[data.index].isEdit" :key="index" :value="items[data.index][field.key]" @input="(value) => inputHandler(value, data.index, field.key)" :options="field.options"></b-form-select>
         <b-button :key="index" v-else-if="field.type === 'edit'" @click="editRowHandler(data)">
           <span v-if="!items[data.index].isEdit">Edit</span>
           <span v-else>Done</span>

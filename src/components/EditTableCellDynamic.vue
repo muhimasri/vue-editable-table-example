@@ -1,10 +1,10 @@
 <template>
-    <b-table hover :items="items" :fields="fields">
+    <b-table :items="items" :fields="fields">
       <template v-for="(field, index) in fields" #[`cell(${field.key})`]="data">
-        <b-form-datepicker v-if="field.type === 'date' && selectedRow[data.index] && selectedCell.name === field.key" :key="index" :type="field.type" v-model="items[data.index][field.key]"></b-form-datepicker>
-        <b-form-select v-else-if="field.type === 'select' && selectedRow[data.index] && selectedCell.name === field.key" :key="index" v-model="items[data.index][field.key]" :options="field.options" class="form-control"></b-form-select>
-        <b-form-input @change="validate" :state="selectedCell.status" v-else-if="field.type && selectedRow[data.index] && selectedCell.name === field.key" :key="index" :type="field.type" v-model="items[data.index][field.key]"></b-form-input>
-        <span :key="index" v-else @click="handleEditCell(data, field.key)">{{data.value}}</span>
+        <b-form-datepicker v-if="field.type === 'date' && items[data.index].isEdit && selectedCell === field.key" :key="index" :type="field.type" :value="items[data.index][field.key]" @input="(value) => inputHandler(value, data.index, field.key)"></b-form-datepicker>
+        <b-form-select v-else-if="field.type === 'select' && items[data.index].isEdit && selectedCell === field.key" :key="index" :value="items[data.index][field.key]" @input="(value) => inputHandler(value, data.index, field.key)" :options="field.options" class="form-control"></b-form-select>
+        <b-form-input @change="validate" :state="selectedCell.status" v-else-if="field.type && items[data.index].isEdit && selectedCell === field.key" :key="index" :type="field.type" :value="items[data.index][field.key]" @input="(value) => inputHandler(value, data.index, field.key)"></b-form-input>
+        <span :key="index" v-else @click="editCellHandler(data, field.key)">{{data.value}}</span>
       </template>
     </b-table>
 </template>
@@ -16,31 +16,24 @@ export default {
   components: {
   },
   props: {
-    items: Array,
+    value: Array,
     fields: Array
   },
   data() {
-      return {
-        selectedCell: null,
-        selectedRow: {}
-      }
-    },
+    return {
+      items: this.value.map(item => ({...item, isEdit: false})),
+      selectedCell: null
+    }
+  },
   methods: {
-      handleEditCell(data, name) {
-        this.selectedCell = {
-          name,
-          status: null
-        };
-        this.selectedRow = {
-          [data.index]: true
-        }
+      editCellHandler(data, name) {
+         this.items = this.items.map(item => ({...item, isEdit: false}));
+         this.items[data.index].isEdit = true;
+         this.selectedCell = name
       },
-      validate(value) {
-        if (value === '') {
-          this.selectedCell.status = false;
-        } else {
-          this.selectedCell.status = true;
-        }
+      inputHandler(value, index, key) {
+        this.items[index][key] = value;
+        this.$emit('input', this.items);
       }
     }
 }
@@ -51,5 +44,9 @@ thead, tbody, tfoot, tr, td, th {
   text-align: left;
   width: 100px;
   vertical-align: middle;
+}
+
+tr span {
+  display: flex;
 }
 </style>

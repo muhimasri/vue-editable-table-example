@@ -1,28 +1,16 @@
 <template>
   <b-table :items="tableItems" :fields="fields">
-      <template #cell(name)="data">
-          <b-form-input v-if="tableItems[data.index].isEdit" type="text" v-model="tableItems[data.index].name"></b-form-input>
-          <span v-else>{{data.value}}</span>
-      </template>
-      <template #cell(department)="data">
-        <b-form-select v-if="tableItems[data.index].isEdit" v-model="tableItems[data.index].department" :options="['Development', 'Marketing', 'HR', 'Accounting']"></b-form-select>
-        <span v-else>{{data.value}}</span>
-      </template>
-      <template #cell(age)="data">
-          <b-form-input v-if="tableItems[data.index].isEdit" type="number" v-model="tableItems[data.index].age"></b-form-input>
-          <span v-else>{{data.value}}</span>
-      </template>
-      <template #cell(dateOfBirth)="data">
-        <b-form-datepicker v-if="tableItems[data.index].isEdit" v-model="tableItems[data.index].dateOfBirth"></b-form-datepicker>
-        <span v-else>{{data.value}}</span>
-      </template>
-      <template #cell(edit)="data">
-        <b-button @click="handleEditRow(data)">
+      <template v-for="(field, index) in fields" #[`cell(${field.key})`]="data">
+        <b-form-datepicker v-if="field.type === 'date' && tableItems[data.index].isEdit" :key="index" :type="field.type" :value="tableItems[data.index][field.key]" @input="(value) => inputHandler(value, data.index, field.key)"></b-form-datepicker>
+        <b-form-select v-else-if="field.type === 'select' && tableItems[data.index].isEdit" :key="index" :value="tableItems[data.index][field.key]" @input="(value) => inputHandler(value, data.index, field.key)" :options="field.options"></b-form-select>
+        <b-button :key="index" v-else-if="field.type === 'edit'" @click="editRowHandler(data)">
           <span v-if="!tableItems[data.index].isEdit">Edit</span>
           <span v-else>Done</span>
         </b-button>
+        <b-form-input v-else-if="field.type && tableItems[data.index].isEdit" :key="index" :type="field.type" :value="tableItems[data.index][field.key]" @input="(value) => inputHandler(value, data.index, field.key)"></b-form-input>
+        <span :key="index" v-else>{{data.value}}</span>
       </template>
-    </b-table>
+  </b-table>
 </template>
 
 <script>
@@ -30,17 +18,21 @@ export default {
   name: "EditableTable",
   components: {},
   props: {
-    items: Array,
+    value: Array,
     fields: Array
   },
   data() {
     return {
-      tableItems: this.items.map(item => ({...item, isEdit: false}))
+      tableItems: this.value.map(item => ({...item, isEdit: false}))
     }
   },
   methods: {
-      handleEditRow(data) {
+      editRowHandler(data) {
         this.tableItems[data.index].isEdit = !this.tableItems[data.index].isEdit;
+      },
+      inputHandler(value, index, key) {
+        this.tableItems[index][key] = value;
+        this.$emit('input', this.tableItems);
       }
     }
 };
