@@ -5,13 +5,13 @@
       </b-modal>
         <div class="action-container">
           <b-button class="add-button" variant="success" @click="addRowHandler">Add Row</b-button>
-          <b-button variant="danger" @click="openDialog = true">Delete Rows</b-button>
+          <b-button variant="danger" @click="openDialog = true">Remove Rows</b-button>
         </div>
         <b-table class="b-table" :items="tableItems" :fields="fields" fixed>
             <template v-for="(field, index) in fields" #[`cell(${field.key})`]="data">
                 <b-form-datepicker v-if="field.type === 'date' && tableItems[data.index].isEdit" :key="index" :type="field.type" :value="tableItems[data.index][field.key]" @input="(value) => inputHandler(value, data.index, field.key)"></b-form-datepicker>
                 <b-form-select v-else-if="field.type === 'select' && tableItems[data.index].isEdit" :key="index" :value="tableItems[data.index][field.key]" @input="(value) => inputHandler(value, data.index, field.key)" :options="field.options"></b-form-select>
-                <b-checkbox  v-else-if="field.type === 'checkbox' && field.key === 'selectRow'" :checked="tableItems[data.index].isSelected" :key="index" @change="selectRowHandler(data)"></b-checkbox>
+                <b-checkbox  v-else-if="field.key === 'selectRow'" :checked="tableItems[data.index].isSelected" :key="index" @change="selectRowHandler(data)"></b-checkbox>
                 <div :key="index" v-else-if="field.type === 'edit'">
                     <b-button @click="editRowHandler(data)">
                         <span v-if="!tableItems[data.index].isEdit">Edit</span>

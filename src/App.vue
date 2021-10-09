@@ -15,7 +15,7 @@ export default {
   data() {
     return {
       fields: [
-        { key: "selectRow", label: "", type: "checkbox" },
+        { key: "selectRow", label: "" },
         { key: "name", label: "Name", type: "text" },
         { key: "department", label: "Department", type: "select", options: ['Development', 'Marketing', 'HR', 'Accounting'] },
         { key: "age", label: "Age", type: "number" },
