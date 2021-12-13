@@ -106,10 +106,13 @@ export default {
     removeRowHandler(index) {
       this.tableItems = this.tableItems.filter((item, i) => i !== index);
       this.$emit("input", this.tableItems);
+      this.$emit("remove", this.tableItems[index]);
     },
     removeRowsHandler() {
-      this.tableItems = this.tableItems.filter((item) => !item.isSelected);
+      const selectedItems = this.tableItems.filter(item => item.isSelected);
+      this.tableItems = this.tableItems.filter(item => !item.isSelected);
       this.$emit("input", this.tableItems);
+      this.$emit("remove", selectedItems);
     },
     selectRowHandler(data) {
       this.tableItems[data.index].isSelected =
