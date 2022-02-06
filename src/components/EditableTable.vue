@@ -56,7 +56,7 @@
           :key="index"
           :type="field.type"
           :value="tableItems[data.index][field.key]"
-          @input="(value) => inputHandler(value, data.index, field.key)"
+          @blur="(e) => inputHandler(e.target.value, data.index, field.key)"
         ></b-form-input>
         <span :key="index" v-else>{{ data.value }}</span>
       </template>
@@ -92,6 +92,7 @@ export default {
     },
     inputHandler(value, index, key) {
       this.tableItems[index][key] = value;
+      this.$set(this.tableItems, index, this.tableItems[index]);
       this.$emit("input", this.tableItems);
     },
     addRowHandler() {
