@@ -22,8 +22,8 @@ export default {
     return {
       fields: [
         { key: "selectRow", label: "" },
-        { key: "name", label: "Name", type: "text" },
-        { key: "email", label: "Email", type: "email" },
+        { key: "name", label: "Name", type: "text", required: true },
+        { key: "email", label: "Email", type: "email", required: true, pattern: ".+@bootstrapvue\\.com" },
         { key: "phone", label: "Phone", type: "text" },
         { key: "edit", label: "", type: "edit" },
       ],
