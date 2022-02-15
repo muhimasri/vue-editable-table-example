@@ -24,13 +24,13 @@
           :key="index"
           :type="field.type"
           :value="tableItems[data.index][field.key]"
-          @input="(value) => inputHandler(value, data.index, field.key)"
+          @input="(value) => inputHandler(value, data.index, field)"
         ></b-form-datepicker>
         <b-form-select
           v-else-if="field.type === 'select' && tableItems[data.index].isEdit"
           :key="index"
           :value="tableItems[data.index][field.key]"
-          @input="(value) => inputHandler(value, data.index, field.key)"
+          @input="(value) => inputHandler(value, data.index, field)"
           :options="field.options"
         ></b-form-select>
         <b-checkbox
@@ -40,11 +40,12 @@
           @change="selectRowHandler(data)"
         ></b-checkbox>
         <div :key="index" v-else-if="field.type === 'edit'">
-          <b-button @click="editRowHandler(data)">
+          <b-button @click="editRowHandler(data, field)" :disabled="disableButton(data)">
             <span v-if="!tableItems[data.index].isEdit">Edit</span>
             <span v-else>Done</span>
           </b-button>
           <b-button
+            v-if="!tableItems[data.index].isEdit"
             class="delete-button"
             variant="danger"
             @click="removeRowHandler(data.index)"
@@ -56,7 +57,10 @@
           :key="index"
           :type="field.type"
           :value="tableItems[data.index][field.key]"
-          @blur="(e) => inputHandler(e.target.value, data.index, field.key)"
+          @blur="(e) => inputHandler(e, data.index, field)"
+          :required="field.required"
+          :pattern="field.pattern"
+          :state="tableItems[data.index].validity[field.key]"
         ></b-form-input>
         <span :key="index" v-else>{{ data.value }}</span>
       </template>
@@ -89,11 +93,21 @@ export default {
         this.$emit("submit", this.tableItems[data.index]);
       }
       this.tableItems[data.index].isEdit = !this.tableItems[data.index].isEdit;
+      this.tableItems[data.index].validity = {};
+      this.$set(this.tableItems, data.index, this.tableItems[data.index]);
     },
-    inputHandler(value, index, key) {
-      this.tableItems[index][key] = value;
-      this.$set(this.tableItems, index, this.tableItems[index]);
-      this.$emit("input", this.tableItems);
+    inputHandler(e, index, field) {
+      if (!e.target.validity.valid ) {
+        this.tableItems[index].validity[field.key] = false;
+        this.$set(this.tableItems, index, this.tableItems[index]);
+      } else {
+        if (field.required || field.patter) {
+          this.tableItems[index].validity[field.key] = true;
+        }
+        this.tableItems[index][field.key] = e.target.value;
+        this.$set(this.tableItems, index, this.tableItems[index]);
+        this.$emit("input", this.tableItems);
+      }
     },
     addRowHandler() {
       const newRow = this.fields.reduce(
@@ -110,14 +124,17 @@ export default {
       this.$emit("remove", this.tableItems[index]);
     },
     removeRowsHandler() {
-      const selectedItems = this.tableItems.filter(item => item.isSelected);
-      this.tableItems = this.tableItems.filter(item => !item.isSelected);
+      const selectedItems = this.tableItems.filter((item) => item.isSelected);
+      this.tableItems = this.tableItems.filter((item) => !item.isSelected);
       this.$emit("input", this.tableItems);
       this.$emit("remove", selectedItems);
     },
     selectRowHandler(data) {
-      this.tableItems[data.index].isSelected =
-        !this.tableItems[data.index].isSelected;
+      this.tableItems[data.index].isSelected = !this.tableItems[data.index]
+        .isSelected;
+    },
+    disableButton(data) {
+      return Object.values(data.item.validity).some(valid => !valid);
     },
     mapItems(data) {
       return data.map((item, index) => ({
@@ -126,6 +143,7 @@ export default {
         isSelected: this.tableItems[index]
           ? this.tableItems[index].isSelected
           : false,
+        validity: this.tableItems[index] ? this.tableItems[index].validity : {},
       }));
     },
   },
